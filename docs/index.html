@@ -1,52 +1,257 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <title>Portfolio - Juan Morales</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: auto;
-      padding: 40px;
-      line-height: 1.6;
-    }
-    h1 {
-      margin-bottom: 10px;
-    }
-    h2 {
-      margin-top: 30px;
-    }
-    a {
-      display: block;
-      margin: 12px 0;
-      font-size: 18px;
-      text-decoration: none;
-      color: #0366d6;
-    }
-    a:hover {
-      text-decoration: underline;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio — Juan Morales</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=Playfair+Display:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #0a0a0a;
+    color: #e8e4dc;
+    font-family: 'DM Mono', monospace;
+    min-height: 100vh;
+    padding: 0;
+    overflow-x: hidden;
+  }
+
+  .noise {
+    position: fixed; inset: 0; pointer-events: none; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    opacity: 0.4;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 72px 40px 80px;
+  }
+
+  .header {
+    margin-bottom: 64px;
+    opacity: 0; animation: fadeUp 0.8s ease forwards;
+  }
+
+  .tag {
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    color: #8a7f6e;
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  .name {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(36px, 6vw, 56px);
+    font-weight: 600;
+    line-height: 1.05;
+    color: #f0ebe0;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+  }
+
+  .name span {
+    color: #c9a96e;
+  }
+
+  .bio {
+    font-size: 13px;
+    color: #7a7268;
+    line-height: 1.8;
+    max-width: 520px;
+    font-weight: 300;
+  }
+
+  .divider {
+    width: 40px; height: 1px;
+    background: #c9a96e;
+    margin: 48px 0 40px;
+    opacity: 0; animation: fadeUp 0.8s ease 0.2s forwards;
+  }
+
+  .section-label {
+    font-size: 10px;
+    letter-spacing: 0.22em;
+    color: #5a5450;
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    opacity: 0; animation: fadeUp 0.8s ease 0.3s forwards;
+  }
+
+  .projects {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .project-card {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+    padding: 28px 32px;
+    background: #111010;
+    border: 1px solid #1e1c1a;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    transition: background 0.25s, border-color 0.25s;
+    opacity: 0;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .project-card::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 2px;
+    background: #c9a96e;
+    transform: scaleY(0);
+    transform-origin: bottom;
+    transition: transform 0.3s ease;
+  }
+
+  .project-card:hover { background: #161412; border-color: #2e2a26; }
+  .project-card:hover::before { transform: scaleY(1); }
+
+  .project-card:nth-child(1) { animation: fadeUp 0.7s ease 0.4s forwards; }
+  .project-card:nth-child(2) { animation: fadeUp 0.7s ease 0.55s forwards; }
+  .project-card:nth-child(3) { animation: fadeUp 0.7s ease 0.7s forwards; }
+
+  .project-num {
+    font-size: 11px;
+    color: #c9a96e;
+    letter-spacing: 0.1em;
+    min-width: 28px;
+    font-weight: 500;
+  }
+
+  .project-info { flex: 1; }
+
+  .project-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    color: #e8e4dc;
+    margin-bottom: 6px;
+    letter-spacing: -0.01em;
+    transition: color 0.2s;
+  }
+
+  .project-card:hover .project-title { color: #f5f0e8; }
+
+  .project-desc {
+    font-size: 11px;
+    color: #5a5450;
+    letter-spacing: 0.06em;
+    font-weight: 300;
+  }
+
+  .project-arrow {
+    font-size: 16px;
+    color: #3a3530;
+    transition: color 0.2s, transform 0.2s;
+  }
+
+  .project-card:hover .project-arrow {
+    color: #c9a96e;
+    transform: translateX(4px);
+  }
+
+  .footer {
+    margin-top: 64px;
+    padding-top: 32px;
+    border-top: 1px solid #1a1816;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 0; animation: fadeUp 0.8s ease 0.9s forwards;
+  }
+
+  .footer-left {
+    font-size: 11px;
+    color: #3d3a36;
+    letter-spacing: 0.1em;
+  }
+
+  .footer-contact {
+    font-size: 11px;
+    color: #5a5450;
+    letter-spacing: 0.05em;
+  }
+
+  .footer-contact a {
+    color: #c9a96e;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+  .footer-contact a:hover { opacity: 0.7; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 540px) {
+    .container { padding: 48px 24px 60px; }
+    .project-card { padding: 22px 20px; gap: 16px; }
+    .footer { flex-direction: column; gap: 12px; align-items: flex-start; }
+  }
+</style>
 </head>
 <body>
+<div class="noise"></div>
+<div class="container">
 
-<h1>Investment Projects</h1>
-<p>Selected work focused on quantitative strategies and financial analysis.</p>
+  <div class="header">
+    <p class="tag">Investment Research &amp; Quantitative Finance</p>
+    <h1 class="name">Juan Álvaro<br>Morales <span>Ramírez</span></h1>
+    <p class="bio">Selected work in quantitative strategies and financial analysis. ITESO Financial Engineering · CFA Level 1 Candidate (Nov-2026).</p>
+  </div>
 
-<h2>Projects</h2>
+  <div class="divider"></div>
 
-<a href="sistema-trend-following-validacion-estadistica-2026.pdf" target="_blank">
-  1. Trend Following
-</a>
+  <p class="section-label">Projects</p>
 
-<a href="antifragile_asset_allocation.pdf" target="_blank">
-  2. Antifragile Asset Allocation Model
-</a>
+  <div class="projects">
+    <a class="project-card" href="sistema-trend-following-validacion-estadistica-2026.pdf" target="_blank">
+      <span class="project-num">01</span>
+      <div class="project-info">
+        <p class="project-title">Trend Following</p>
+        <p class="project-desc">Statistical validation · Quantitative strategy</p>
+      </div>
+      <span class="project-arrow">→</span>
+    </a>
 
-<a href="intraday_vs_overnight.pdf" target="_blank">
-  3. Analysis: Intraday vs Overnight Returns
-</a>
+    <a class="project-card" href="antifragile_asset_allocation.pdf" target="_blank">
+      <span class="project-num">02</span>
+      <div class="project-info">
+        <p class="project-title">Antifragile Asset Allocation Model</p>
+        <p class="project-desc">Portfolio construction · Risk framework</p>
+      </div>
+      <span class="project-arrow">→</span>
+    </a>
 
+    <a class="project-card" href="intraday_vs_overnight.pdf" target="_blank">
+      <span class="project-num">03</span>
+      <div class="project-info">
+        <p class="project-title">Intraday vs Overnight Returns</p>
+        <p class="project-desc">Market microstructure · Return decomposition</p>
+      </div>
+      <span class="project-arrow">→</span>
+    </a>
+  </div>
+
+  <div class="footer">
+    <span class="footer-left">© 2026 Juan Álvaro Morales</span>
+    <span class="footer-contact">
+      <a href="mailto:juanmoralesrva@gmail.com">juanmoralesrva@gmail.com</a>
+    </span>
+  </div>
+
+</div>
 </body>
 </html>
